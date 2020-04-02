@@ -29,7 +29,13 @@ dicecloud_token = os.environ['DICECLOUD_TOKEN']
 # Discord Bot List token (only needed in prod)
 dbl_token = os.getenv('DBL_TOKEN')
 
+tenor_key = os.getenv('TENOR_KEY')
+
 
 # - Should probably fix the code to not demand these
 test_mongo_url = ''
 test_redis_url = ''
+
+ddb_json_headers = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0"
+}

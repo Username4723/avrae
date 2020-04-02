@@ -4,6 +4,8 @@ from cogs5e.models.errors import InvalidArgument
 from utils.constants import SKILL_MAP, STAT_ABBREVIATIONS
 from utils.functions import a_or_an, camel_to_title, verbose_stat
 
+import images
+import math
 
 def update_csetting_args(char, args, skill=None):
     """
@@ -102,6 +104,8 @@ def _run_common(skill, args, embed, mod_override=None, rr_format="Check {}"):
     desc_out = []
     num_successes = 0
     results = []
+    crit_fail = False
+    crit_pass = False
 
     # add DC text
     if dc:
@@ -120,6 +124,10 @@ def _run_common(skill, args, embed, mod_override=None, rr_format="Check {}"):
 
         # roll
         result = roll(roll_str, inline=True)
+        if result.crit == 2:
+            crit_fail = True
+        if result.crit == 1:
+            crit_pass = True
         if dc and result.total >= dc:
             num_successes += 1
 
@@ -140,6 +148,16 @@ def _run_common(skill, args, embed, mod_override=None, rr_format="Check {}"):
         embed.set_footer(text=f"{num_successes} Successes | {iterations - num_successes} Failures")
     elif dc:
         embed.set_footer(text="Success!" if num_successes else "Failure!")
+
+    image = None
+    if crit_fail:
+        image = images.crit_fail()
+    elif crit_pass:
+        image = images.crit_success()
+    else:
+        image = images.roll(math.floor(sum(results) / iterations))
+
+    embed.set_image(url=image)
 
     # build embed
     embed.description = '\n'.join(desc_out)

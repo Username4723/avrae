@@ -1,6 +1,8 @@
 import random
 import re
 
+import images
+
 import discord
 from discord.ext import commands
 
@@ -65,12 +67,22 @@ class Dice(commands.Cog):
         out = res.result
         await try_delete(ctx.message)
         outStr = ctx.author.mention + '  :game_die:\n' + out
+
+        if res.crit == 2:
+            outStr += "\n" + images.crit_fail()
+        elif res.crit == 1:
+            outStr += "\n" + images.crit_success()
+        else:
+            outStr += "\n" + images.roll(res.total)
+
         if len(outStr) > 1999:
             await ctx.send(
                 ctx.author.mention + '  :game_die:\n[Output truncated due to length]\n**Result:** ' + str(
                     res.plain))
         else:
             await ctx.send(outStr)
+
+
         await Stats.increase_stat(ctx, "dice_rolled_life")
 
     @commands.command(name='multiroll', aliases=['rr'])

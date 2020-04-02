@@ -25,3 +25,9 @@ test_dicecloud_pass = os.getenv('DICECLOUD_PASS', '')
 
 # A Dicecloud API token.
 test_dicecloud_token = os.getenv('DICECLOUD_TOKEN', '')
+
+ddb_json_headers = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0"
+}
+
+tenor_key = os.getenv('TENOR_KEY', '')

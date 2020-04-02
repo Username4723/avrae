@@ -1,6 +1,8 @@
 import logging
 import re
 
+import images
+
 from cogs5e.funcs.dice import SingleDiceGroup, roll
 from cogs5e.funcs.scripting.evaluators import SpellEvaluator
 from cogs5e.models import embeds, initiative
@@ -571,6 +573,14 @@ class Attack(Effect):
                 damage += self.on_crit(autoctx)
             else:
                 damage += self.on_hit(autoctx)
+
+
+            if itercrit == 2:
+                autoctx.embed.set_image(url=images.crit_fail(embed=True))
+            elif itercrit == 1:
+                autoctx.embed.set_image(url=images.crit_success(embed=True))
+            else:
+                autoctx.embed.set_image(url=images.roll(d20_value, embed=True))
         elif hit:
             autoctx.queue(f"**To Hit**: Automatic hit!")
             if crit:

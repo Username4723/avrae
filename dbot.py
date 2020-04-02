@@ -25,6 +25,8 @@ from cogs5e.models.errors import AvraeException, EvaluationError
 from utils.help import help_command
 from utils.redisIO import RedisIO
 
+import images
+
 # -----COGS-----
 COGS = (
     "cogs5e.dice", "cogs5e.charGen", "cogs5e.homebrew", "cogs5e.lookup", "cogs5e.pbpUtils",
@@ -157,7 +159,8 @@ async def on_ready():
     log.info(bot.user.name)
     log.info(bot.user.id)
     log.info('------')
-
+    await images.load()
+    log.info('Loaded images')
 
 @bot.event
 async def on_resumed():
