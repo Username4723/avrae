@@ -12,6 +12,8 @@ from math import ceil, floor
 import aiohttp
 import html2text
 
+import credentials
+
 from cogs5e.funcs.lookupFuncs import compendium
 from cogs5e.models.character import Character
 from cogs5e.models.errors import ExternalImportError
@@ -22,13 +24,8 @@ from cogs5e.sheets.abc import SHEET_VERSION, SheetLoaderABC
 from utils.constants import SAVE_NAMES, SKILL_MAP, SKILL_NAMES
 from utils.functions import search
 
-try:
-    from credentials import ddb_json_headers as HEADERS
-except ImportError:
-    HEADERS = {}
-
 log = logging.getLogger(__name__)
-
+log.setLevel(10)
 API_BASE = "https://www.dndbeyond.com/character/"
 DAMAGE_TYPES = {1: "bludgeoning", 2: "piercing", 3: "slashing", 4: "necrotic", 5: "acid", 6: "cold", 7: "fire",
                 8: "lightning", 9: "thunder", 10: "poison", 11: "psychic", 12: "radiant", 13: "force"}
@@ -133,8 +130,8 @@ class BeyondSheetParser(SheetLoaderABC):
         charId = self.url
         character = None
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"{API_BASE}{charId}/json", headers=HEADERS) as resp:
-                log.debug(f"DDB returned {resp.status}")
+            async with session.get(f"{API_BASE}{charId}/json", headers=credentials.ddb_json_headers) as resp:
+                log.debug(f"DDB returned {resp.status} for {API_BASE}{charId}/json and headers " + str(credentials.ddb_json_headers))
                 if resp.status == 200:
                     character = await resp.json()
                 elif resp.status == 404:
