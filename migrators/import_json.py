@@ -35,15 +35,15 @@ async def run(mdb):
             print(f'File not found: {filepath}; skipping import')
             continue
 
-        print(f'Inserting {len(data)} items for {basename}...', end=' ', flush=True)
+#        for i in range(len(data)): data[i].srd = True
+
+        print(f'Inserting {len(data)} items for {basename}...', flush=True)
         result = await mdb.static_data.update_one(
             {'key': basename},
             {'$set': {'object': data}},
             upsert=True
         )
-        print(result.upserted_id)
-
-    print()
+        print(result)
     print('Creating index on static_data...', end=' ', flush=True)
     await mdb.static_data.create_index("key", unique=True)
     print('done.')
