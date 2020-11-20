@@ -74,7 +74,7 @@ class Avrae(commands.AutoShardedBot):
             sentry_sdk.init(dsn=config.SENTRY_DSN, environment=config.ENVIRONMENT.title(), release=release)
 
         # ddb entitlements
-        if config.TESTING and config.DDB_AUTH_SERVICE_URL is None:
+        if config.TESTING or config.DDB_AUTH_SERVICE_URL is None:
             self.ddb = BeyondClientBase()
         else:
             self.ddb = BeyondClient(self.loop)
